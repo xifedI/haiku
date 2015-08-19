@@ -33,7 +33,7 @@ const char **	publish_devices();
 device_hooks *	find_device(const char *name);
 }
 
-#define	TRACE(x...)			/*dprintf(DRIVER_NAME ": " x)*/
+#define	TRACE(x...)			dprintf(DRIVER_NAME ": " x)
 #define TRACE_ALWAYS(x...)	dprintf(DRIVER_NAME ": " x)
 
 #endif //_USB_HID_DRIVER_H_
