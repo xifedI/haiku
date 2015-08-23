@@ -135,14 +135,12 @@ wacom_init(usb_device device, const usb_configuration_info *config,
 {
 	TRACE_ALWAYS("found Wacom device, putting it in Wacom mode\n");
 
-	// an extra get_report is required for the SIXAXIS to become operational
-//	uint8 dummy[18];
-//	status_t result = gUSBModule->send_request(device, USB_REQTYPE_INTERFACE_IN
-//			| USB_REQTYPE_CLASS, B_USB_REQUEST_HID_GET_REPORT, 0x03f2 /* ? */,
-//		interfaceIndex, sizeof(dummy), dummy, NULL);
-//	if (result != B_OK) {
-//		TRACE_ALWAYS("failed to set operational mode: %s\n", strerror(result));
-//	}
+	// set protocol to report protocol
+	status_t result = gUSBModule->send_request(device, USB_REQTYPE_INTERFACE_OUT
+			| USB_REQTYPE_CLASS, B_USB_REQUEST_HID_SET_PROTOCOL, 1,
+		interfaceIndex, 0, NULL, NULL);
+	if (result != B_OK)
+		TRACE_ALWAYS("failed to set report protocol: %s\n", strerror(result));
 
 	return B_OK;
 }
