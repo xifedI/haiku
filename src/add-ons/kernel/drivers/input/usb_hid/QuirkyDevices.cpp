@@ -129,6 +129,25 @@ xbox360_build_descriptor(HIDWriter &writer)
 }
 
 
+static status_t
+wacom_init(usb_device device, const usb_configuration_info *config,
+	size_t interfaceIndex)
+{
+	TRACE_ALWAYS("found Wacom device, putting it in Wacom mode\n");
+
+	// an extra get_report is required for the SIXAXIS to become operational
+//	uint8 dummy[18];
+//	status_t result = gUSBModule->send_request(device, USB_REQTYPE_INTERFACE_IN
+//			| USB_REQTYPE_CLASS, B_USB_REQUEST_HID_GET_REPORT, 0x03f2 /* ? */,
+//		interfaceIndex, sizeof(dummy), dummy, NULL);
+//	if (result != B_OK) {
+//		TRACE_ALWAYS("failed to set operational mode: %s\n", strerror(result));
+//	}
+
+	return B_OK;
+}
+
+
 usb_hid_quirky_device gQuirkyDevices[] = {
 	{
 		// The Sony SIXAXIS controller (PS3) needs a GET_REPORT to become
@@ -147,6 +166,11 @@ usb_hid_quirky_device gQuirkyDevices[] = {
 		// and build a report descriptor of our own.
 		0, 0, 0xff /* vendor specific */, 0x5d /* XBOX controller */, 0x01,
 		NULL, xbox360_build_descriptor
+	},
+
+	{
+		0x056a, 0, USB_HID_DEVICE_CLASS, B_USB_HID_INTERFACE_BOOT_SUBCLASS,
+		0, wacom_init, NULL
 	}
 };
 
