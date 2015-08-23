@@ -133,16 +133,56 @@ static status_t
 wacom_init(usb_device device, const usb_configuration_info *config,
 	size_t interfaceIndex)
 {
-	TRACE_ALWAYS("found Wacom device, putting it in Wacom mode\n");
+	status_t result;
+
+	TRACE_ALWAYS("found Wacom device, setting it to Wacom mode\n");
 
 	// set protocol to report protocol
-	status_t result = gUSBModule->send_request(device, USB_REQTYPE_INTERFACE_OUT
+	result = gUSBModule->send_request(device, USB_REQTYPE_INTERFACE_OUT
 			| USB_REQTYPE_CLASS, B_USB_REQUEST_HID_SET_PROTOCOL, 1,
 		interfaceIndex, 0, NULL, NULL);
 	if (result != B_OK)
 		TRACE_ALWAYS("failed to set report protocol: %s\n", strerror(result));
 
-	return B_OK;
+	// set the device to Wacom mode
+	int tryCount;
+	char reportData[2] = { 0x02, 0x02 };
+	char returnData[2] = { 0x00, 0x00 };
+	for (tryCount = 0; tryCount < 5; tryCount++) {
+		// Feature Report Type (= 0x03)
+		// TODO: add constant?
+		// TODO: why Report ID = 0x02? (can't find it in Linux driver)
+		result = gUSBModule->send_request(device, USB_REQTYPE_INTERFACE_OUT
+				| USB_REQTYPE_CLASS, B_USB_REQUEST_HID_SET_REPORT,
+			(0x03 << 8) + 0x02, interfaceIndex, sizeof(reportData), reportData,
+			NULL);
+		if (result != B_OK)
+			TRACE_ALWAYS("failed to send feature report: %s\n",
+					strerror(result));
+
+		result = gUSBModule->send_request(device, USB_REQTYPE_INTERFACE_IN
+				| USB_REQTYPE_CLASS, B_USB_REQUEST_HID_GET_REPORT,
+			(0x03 << 8) + 0x02, interfaceIndex, sizeof(returnData), returnData,
+			NULL);
+		if (result != B_OK)
+			TRACE_ALWAYS("failed to get feature report: %s\n",
+					strerror(result));
+
+		TRACE("returnData: %u - %u\n", returnData[0], returnData[1]);
+
+		if (returnData[1] == reportData[1]) {
+			TRACE_ALWAYS("device successfully set to Wacom mode\n");
+			break;
+		}
+	}
+
+	TRACE("number of tries: %u\n", tryCount + 1);
+
+	if (tryCount > 4) {
+		TRACE_ALWAYS("device failed to set to Wacom mode\n");
+	}
+
+	return result;
 }
 
 
