@@ -32,7 +32,7 @@
 
 /* References:
  *
- *		Device Class Definition for Human Interface Devices	(HID) Ver. 1.11
+ *		Device Class Definition for Human Interface Devices (HID) Ver. 1.11
  *		http://www.usb.org/developers/devclass_docs/hid1_11.pdf
  *
  *		HID Usage Tables Ver. 1.12
