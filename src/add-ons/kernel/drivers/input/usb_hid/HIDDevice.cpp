@@ -292,7 +292,8 @@ HIDDevice::SendReport(HIDReport *report)
 	size_t actualLength;
 	return gUSBModule->send_request(fDevice,
 		USB_REQTYPE_INTERFACE_OUT | USB_REQTYPE_CLASS,
-		B_USB_REQUEST_HID_SET_REPORT, 0x200 | report->ID(), fInterfaceIndex,
+		B_USB_REQUEST_HID_SET_REPORT,
+		(B_USB_REQUEST_HID_OUTPUT_REPORT << 8) | report->ID(), fInterfaceIndex,
 		report->ReportSize(), report->CurrentReport(), &actualLength);
 }
 

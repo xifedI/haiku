@@ -22,8 +22,9 @@ sixaxis_init(usb_device device, const usb_configuration_info *config,
 	// an extra get_report is required for the SIXAXIS to become operational
 	uint8 dummy[18];
 	status_t result = gUSBModule->send_request(device, USB_REQTYPE_INTERFACE_IN
-			| USB_REQTYPE_CLASS, B_USB_REQUEST_HID_GET_REPORT, 0x03f2 /* ? */,
-		interfaceIndex, sizeof(dummy), dummy, NULL);
+			| USB_REQTYPE_CLASS, B_USB_REQUEST_HID_GET_REPORT,
+		(B_USB_REQUEST_HID_FEATURE_REPORT << 8) | 0xf2 /* ? */, interfaceIndex,
+		sizeof(dummy), dummy, NULL);
 	if (result != B_OK) {
 		TRACE_ALWAYS("failed to set operational mode: %s\n", strerror(result));
 	}
@@ -146,24 +147,21 @@ wacom_init(usb_device device, const usb_configuration_info *config,
 
 	// set the device to Wacom mode
 	int tryCount;
-	char reportData[2] = { 0x02, 0x02 };
+	char reportData[2] = { 0x02, 0x02 };	// Report ID, Mode
 	char returnData[2] = { 0x00, 0x00 };
 	for (tryCount = 0; tryCount < 5; tryCount++) {
-		// Feature Report Type (= 0x03)
-		// TODO: add constant?
-		// TODO: why Report ID = 0x02? (can't find it in Linux driver)
 		result = gUSBModule->send_request(device, USB_REQTYPE_INTERFACE_OUT
 				| USB_REQTYPE_CLASS, B_USB_REQUEST_HID_SET_REPORT,
-			(0x03 << 8) + 0x02, interfaceIndex, sizeof(reportData), reportData,
-			NULL);
+			(B_USB_REQUEST_HID_FEATURE_REPORT << 8) | reportData[0],
+			interfaceIndex, sizeof(reportData), reportData, NULL);
 		if (result != B_OK)
 			TRACE_ALWAYS("failed to send feature report: %s\n",
 					strerror(result));
 
 		result = gUSBModule->send_request(device, USB_REQTYPE_INTERFACE_IN
 				| USB_REQTYPE_CLASS, B_USB_REQUEST_HID_GET_REPORT,
-			(0x03 << 8) + 0x02, interfaceIndex, sizeof(returnData), returnData,
-			NULL);
+			(B_USB_REQUEST_HID_FEATURE_REPORT << 8) | reportData[0],
+			interfaceIndex, sizeof(returnData), returnData, NULL);
 		if (result != B_OK)
 			TRACE_ALWAYS("failed to get feature report: %s\n",
 					strerror(result));
