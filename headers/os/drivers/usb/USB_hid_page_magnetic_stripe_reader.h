@@ -8,8 +8,8 @@
 
 /* Reference:
  *		HID Usage Page 0x8E: MAGENTIC STRIPE READER
- *		HID Point of Sale Usage Tables Ver. 1.0
- *		http://www.usb.org/developers/devclass_docs/pos1_02.pdf
+ *		HID Point of Sale Usage Tables Ver. 1.02
+ *		http://www.usb.org/developers/hidpage/pos1_02.pdf
  */
 
 // Usage IDs

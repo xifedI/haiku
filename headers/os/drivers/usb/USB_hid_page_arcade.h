@@ -10,7 +10,7 @@
  *		HID Usage Page 24: ARCADE
  *		Open Arcade Architecture Device (OAAD) -
  *		Data Format Specification Rev. 1.100
- *		http://www.usb.org/developers/devclass_docs/oaaddataformatsv6.pdf
+ *		http://www.usb.org/developers/hidpage/OAADDATAFORMATSv6.PDF
  */
 
 // Usage IDs

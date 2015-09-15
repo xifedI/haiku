@@ -9,7 +9,7 @@
 /* Reference:
  *		HID Usage Page 0x06: GENERIC DEVICE CONTROLS
  *		HID Usage Tables Ver. 1.12
- *		http://www.usb.org/developers/devclass_docs/Hut1_12.pdf
+ *		http://www.usb.org/developers/hidpage/Hut1_12v2.pdf
  */
 
 // Usage IDs
