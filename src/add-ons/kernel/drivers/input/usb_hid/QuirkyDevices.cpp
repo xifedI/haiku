@@ -198,10 +198,7 @@ wacom_build_descriptor(HIDWriter &writer)
 	converter.main_data.relative = 0;
 	converter.main_data.no_preferred = 1;
 
-	writer.SetReportID(1);	// TODO: really needed?
-
-	// Report ID
-	writer.DefineInputPadding(1, 8);
+	writer.SetReportID(2);	// WACOM_REPORT_PENABLED
 
 	// Stylus tip / button 1 / button 2
 	writer.DefineInputData(3, 1, converter.main_data, 0, 1,
@@ -229,7 +226,7 @@ wacom_build_descriptor(HIDWriter &writer)
 	writer.DefineInputData(1, 10, converter.main_data, 0, 1023,
 		B_HID_USAGE_PAGE_DIGITIZER, B_HID_UID_DIG_TIP_PRESSURE);
 
-	// Padding (total packet size: 8 bytes)
+	// Padding (total packet size: 8 bytes (WACOM_PKGLEN_PENABLED))
 	writer.DefineInputPadding(1, 6);
 
 	return writer.EndCollection();
