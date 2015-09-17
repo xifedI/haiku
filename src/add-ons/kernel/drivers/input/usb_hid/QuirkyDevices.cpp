@@ -184,6 +184,58 @@ wacom_init(usb_device device, const usb_configuration_info *config,
 }
 
 
+static status_t
+wacom_build_descriptor(HIDWriter &writer)
+{
+	// Builds a descriptor for the Wacom Graphire 2 pen
+
+	writer.BeginCollection(COLLECTION_APPLICATION,
+		B_HID_USAGE_PAGE_DIGITIZER, B_HID_UID_DIG_DIGITIZER);
+
+	main_item_data_converter converter;
+	converter.flat_data = 0; // defaults
+	converter.main_data.array_variable = 1;
+	converter.main_data.relative = 0;
+	converter.main_data.no_preferred = 1;
+
+	writer.SetReportID(1);	// TODO: really needed?
+
+	// Report ID
+	writer.DefineInputPadding(1, 8);
+
+	// Stylus tip / button 1 / button 2
+	writer.DefineInputData(3, 1, converter.main_data, 0, 1,
+		B_HID_USAGE_PAGE_BUTTON, 0x1);
+
+	// Padding
+	writer.DefineInputPadding(1, 2);
+
+	// Device ID	TODO: can be used to switch between tip and eraser
+	writer.DefineInputPadding(1, 2);
+
+	// Proximity
+	writer.DefineInputData(1, 1, converter.main_data, 0, 1,
+		B_HID_USAGE_PAGE_DIGITIZER, B_HID_UID_DIG_IN_RANGE);
+
+	// X position
+	writer.DefineInputData(1, 16, converter.main_data, 0, 65535,
+		B_HID_USAGE_PAGE_GENERIC_DESKTOP, B_HID_UID_GD_X);
+
+	// Y position
+	writer.DefineInputData(1, 16, converter.main_data, 0, 65535,
+		B_HID_USAGE_PAGE_GENERIC_DESKTOP, B_HID_UID_GD_Y);
+
+	// Stylus pressure
+	writer.DefineInputData(1, 10, converter.main_data, 0, 1023,
+		B_HID_USAGE_PAGE_DIGITIZER, B_HID_UID_DIG_TIP_PRESSURE);
+
+	// Padding (total packet size: 8 bytes)
+	writer.DefineInputPadding(1, 6);
+
+	return writer.EndCollection();
+}
+
+
 usb_hid_quirky_device gQuirkyDevices[] = {
 	{
 		// The Sony SIXAXIS controller (PS3) needs a GET_REPORT to become
@@ -206,7 +258,7 @@ usb_hid_quirky_device gQuirkyDevices[] = {
 
 	{
 		0x056a, 0, USB_HID_DEVICE_CLASS, B_USB_HID_INTERFACE_BOOT_SUBCLASS,
-		0, wacom_init, NULL
+		0, wacom_init, wacom_build_descriptor
 	}
 };
 
