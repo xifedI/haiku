@@ -289,6 +289,9 @@ TabletProtocolHandler::_ReadReport(void *buffer, uint32 *cookie)
 	fReport.DoneProcessing();
 	TRACE("got tablet report\n");
 
+	TRACE("raw:\tX\tY\tPressure\tinRange\n");
+	TRACE("\t%.3f\t%f\t%f\t\t%s\n", axisAbsoluteData[0], axisAbsoluteData[1], pressure, inRange ? "true" : "false");
+
 	int32 clicks = 0;
 	bigtime_t timestamp = system_time();
 	if (buttons != 0) {
