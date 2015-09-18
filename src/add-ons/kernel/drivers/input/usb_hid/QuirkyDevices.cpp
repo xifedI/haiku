@@ -215,15 +215,15 @@ wacom_build_descriptor(HIDWriter &writer)
 		B_HID_USAGE_PAGE_DIGITIZER, B_HID_UID_DIG_IN_RANGE);
 
 	// X position
-	writer.DefineInputData(1, 16, converter.main_data, 0, 65535,
+	writer.DefineInputData(1, 16, converter.main_data, 0, 10208,
 		B_HID_USAGE_PAGE_GENERIC_DESKTOP, B_HID_UID_GD_X);
 
 	// Y position
-	writer.DefineInputData(1, 16, converter.main_data, 0, 65535,
+	writer.DefineInputData(1, 16, converter.main_data, 0, 7424,
 		B_HID_USAGE_PAGE_GENERIC_DESKTOP, B_HID_UID_GD_Y);
 
 	// Stylus pressure
-	writer.DefineInputData(1, 10, converter.main_data, 0, 1023,
+	writer.DefineInputData(1, 10, converter.main_data, 0, 511,
 		B_HID_USAGE_PAGE_DIGITIZER, B_HID_UID_DIG_TIP_PRESSURE);
 
 	// Padding (total packet size: 8 bytes (WACOM_PKGLEN_PENABLED))
