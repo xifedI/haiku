@@ -280,7 +280,7 @@ TabletProtocolHandler::_ReadReport(void *buffer, uint32 *cookie)
 
 	bool inRange = true;
 	if (fRange != NULL && fRange->Extract() == B_OK && fRange->Valid())
-		inRange = fRange->Data() & 1 != 0;
+		inRange = (fRange->Data() & 1) != 0;
 
 	bool eraser = false;
 	if (fEraser != NULL && fEraser->Extract() == B_OK && fEraser->Valid())
@@ -290,7 +290,8 @@ TabletProtocolHandler::_ReadReport(void *buffer, uint32 *cookie)
 	TRACE("got tablet report\n");
 
 	TRACE("raw:\tX\tY\tPressure\tinRange\tButtons\n");
-	TRACE("\t%f\t%f\t%f\t\t%s\t%u\n", axisAbsoluteData[0], axisAbsoluteData[1], pressure, inRange ? "true" : "false", buttons);
+	TRACE("\t%f\t%f\t%f\t\t%s\t%u\n", axisAbsoluteData[0], axisAbsoluteData[1],
+		pressure, inRange ? "true" : "false", buttons);
 
 	int32 clicks = 0;
 	bigtime_t timestamp = system_time();

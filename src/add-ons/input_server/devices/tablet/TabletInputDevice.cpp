@@ -354,11 +354,14 @@ TabletDevice::_ControlThread()
 				if (message != NULL) {
 					message->AddFloat("be:tablet_x", movements.xpos);
 					message->AddFloat("be:tablet_y", movements.ypos);
-					message->AddFloat("be:tablet_pressure", movements.pressure);
+					message->AddFloat("be:tablet_pressure",
+						movements.pressure);
 					message->AddInt32("be:tablet_eraser", movements.eraser);
 					if (movements.tilt_x != 0.0 || movements.tilt_y != 0.0) {
-						message->AddFloat("be:tablet_tilt_x", movements.tilt_x);
-						message->AddFloat("be:tablet_tilt_y", movements.tilt_y);
+						message->AddFloat("be:tablet_tilt_x",
+							movements.tilt_x);
+						message->AddFloat("be:tablet_tilt_y",
+							movements.tilt_y);
 					}
 
 					fTarget.EnqueueMessage(message);
