@@ -289,8 +289,8 @@ TabletProtocolHandler::_ReadReport(void *buffer, uint32 *cookie)
 	fReport.DoneProcessing();
 	TRACE("got tablet report\n");
 
-	TRACE("raw:\tX\tY\tPressure\tinRange\n");
-	TRACE("\t%.3f\t%f\t%f\t\t%s\n", axisAbsoluteData[0], axisAbsoluteData[1], pressure, inRange ? "true" : "false");
+	TRACE("raw:\tX\tY\tPressure\tinRange\tButtons\n");
+	TRACE("\t%f\t%f\t%f\t\t%s\t%u\n", axisAbsoluteData[0], axisAbsoluteData[1], pressure, inRange ? "true" : "false", buttons);
 
 	int32 clicks = 0;
 	bigtime_t timestamp = system_time();
