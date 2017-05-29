@@ -9,7 +9,7 @@
 /* Reference:
  *		HID Usage Page 0x82: VESA VIRTUAL CONTROLS
  *		USB Monitor Control Class Specification, Rev. 1.0
- *		http://www.usb.org/developers/devclass_docs/usbmon10.pdf
+ *		http://www.usb.org/developers/hidpage/usbmon10.pdf
  */
 
 // Usage IDs

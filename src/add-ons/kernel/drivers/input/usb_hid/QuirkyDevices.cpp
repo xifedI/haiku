@@ -22,8 +22,9 @@ sixaxis_init(usb_device device, const usb_configuration_info *config,
 	// an extra get_report is required for the SIXAXIS to become operational
 	uint8 dummy[18];
 	status_t result = gUSBModule->send_request(device, USB_REQTYPE_INTERFACE_IN
-			| USB_REQTYPE_CLASS, B_USB_REQUEST_HID_GET_REPORT, 0x03f2 /* ? */,
-		interfaceIndex, sizeof(dummy), dummy, NULL);
+			| USB_REQTYPE_CLASS, B_USB_REQUEST_HID_GET_REPORT,
+		(B_USB_REQUEST_HID_FEATURE_REPORT << 8) | 0xf2 /* ? */, interfaceIndex,
+		sizeof(dummy), dummy, NULL);
 	if (result != B_OK) {
 		TRACE_ALWAYS("failed to set operational mode: %s\n", strerror(result));
 	}
@@ -129,6 +130,60 @@ xbox360_build_descriptor(HIDWriter &writer)
 }
 
 
+static status_t
+wacom_init(usb_device device, const usb_configuration_info *config,
+	size_t interfaceIndex)
+{
+	status_t result;
+
+	TRACE_ALWAYS("found Wacom device, setting it to Wacom mode\n");
+
+	// set protocol to report protocol
+	result = gUSBModule->send_request(device, USB_REQTYPE_INTERFACE_OUT
+			| USB_REQTYPE_CLASS, B_USB_REQUEST_HID_SET_PROTOCOL, 1,
+		interfaceIndex, 0, NULL, NULL);
+	if (result != B_OK)
+		TRACE_ALWAYS("failed to set report protocol: %s\n", strerror(result));
+
+	// set the device to Wacom mode
+	int tryCount;
+	char reportData[2] = { 0x02, 0x02 };	// Report ID, Mode
+	char returnData[2] = { 0x00, 0x00 };
+	for (tryCount = 0; tryCount < 5; tryCount++) {
+		result = gUSBModule->send_request(device, USB_REQTYPE_INTERFACE_OUT
+				| USB_REQTYPE_CLASS, B_USB_REQUEST_HID_SET_REPORT,
+			(B_USB_REQUEST_HID_FEATURE_REPORT << 8) | reportData[0],
+			interfaceIndex, sizeof(reportData), reportData, NULL);
+		if (result != B_OK)
+			TRACE_ALWAYS("failed to send feature report: %s\n",
+					strerror(result));
+
+		result = gUSBModule->send_request(device, USB_REQTYPE_INTERFACE_IN
+				| USB_REQTYPE_CLASS, B_USB_REQUEST_HID_GET_REPORT,
+			(B_USB_REQUEST_HID_FEATURE_REPORT << 8) | reportData[0],
+			interfaceIndex, sizeof(returnData), returnData, NULL);
+		if (result != B_OK)
+			TRACE_ALWAYS("failed to get feature report: %s\n",
+					strerror(result));
+
+		TRACE("returnData: %u - %u\n", returnData[0], returnData[1]);
+
+		if (returnData[1] == reportData[1]) {
+			TRACE_ALWAYS("device successfully set to Wacom mode\n");
+			break;
+		}
+	}
+
+	TRACE("number of tries: %u\n", tryCount + 1);
+
+	if (tryCount > 4) {
+		TRACE_ALWAYS("device failed to set to Wacom mode\n");
+	}
+
+	return result;
+}
+
+
 usb_hid_quirky_device gQuirkyDevices[] = {
 	{
 		// The Sony SIXAXIS controller (PS3) needs a GET_REPORT to become
@@ -147,6 +202,11 @@ usb_hid_quirky_device gQuirkyDevices[] = {
 		// and build a report descriptor of our own.
 		0, 0, 0xff /* vendor specific */, 0x5d /* XBOX controller */, 0x01,
 		NULL, xbox360_build_descriptor
+	},
+
+	{
+		0x056a, 0, USB_HID_DEVICE_CLASS, B_USB_HID_INTERFACE_BOOT_SUBCLASS,
+		0, wacom_init, NULL
 	}
 };
 

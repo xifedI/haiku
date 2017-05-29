@@ -48,10 +48,6 @@ usb_hid_device_added(usb_device device, void **cookie)
 	TRACE("vendor id: 0x%04x; product id: 0x%04x\n",
 		deviceDescriptor->vendor_id, deviceDescriptor->product_id);
 
-	// wacom devices are handled by the dedicated wacom driver
-	if (deviceDescriptor->vendor_id == USB_VENDOR_WACOM)
-		return B_ERROR;
-
 	const usb_configuration_info *config
 		= gUSBModule->get_nth_configuration(device, USB_DEFAULT_CONFIGURATION);
 	if (config == NULL) {

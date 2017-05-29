@@ -19,7 +19,6 @@
 #define USB_INTERFACE_CLASS_HID			3
 #define USB_INTERFACE_SUBCLASS_HID_BOOT	1
 #define USB_DEFAULT_CONFIGURATION		0
-#define USB_VENDOR_WACOM				0x056a
 
 extern usb_module_info *gUSBModule;
 extern DeviceList *gDeviceList;
@@ -34,7 +33,7 @@ const char **	publish_devices();
 device_hooks *	find_device(const char *name);
 }
 
-#define	TRACE(x...)			/*dprintf(DRIVER_NAME ": " x)*/
+#define	TRACE(x...)			dprintf(DRIVER_NAME ": " x)
 #define TRACE_ALWAYS(x...)	dprintf(DRIVER_NAME ": " x)
 
 #endif //_USB_HID_DRIVER_H_

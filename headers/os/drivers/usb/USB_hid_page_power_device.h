@@ -9,7 +9,7 @@
 /* Reference:
  *		HID Usage Page 0x84: POWER DEVICE
  *		Universal Serial Bus Usage Tables for HID Power Devices Ver. 1.0
- *		http://www.usb.org/developers/devclass_docs/pdcv10.pdf
+ *		http://www.usb.org/developers/hidpage/pdcv10.pdf
  */
 
 // Usage IDs

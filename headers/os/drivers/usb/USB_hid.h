@@ -32,27 +32,27 @@
 
 /* References:
  *
- *		Device Class Definition for Human Interface Devices	(HID) Ver. 1.11
- *		http://www.usb.org/developers/devclass_docs/hid1_11.pdf
+ *		Device Class Definition for Human Interface Devices (HID) Ver. 1.11
+ *		http://www.usb.org/developers/hidpage/HID1_11.pdf
  *
  *		HID Usage Tables Ver. 1.12
- *		http://www.usb.org/developers/devclass_docs/Hut1_12.pdf
+ *		http://www.usb.org/developers/hidpage/Hut1_12v2.pdf
  *
- *		Device Class Definition for Physical Interface Deviced (PID) Ver. 1.0
- *		http://www.usb.org/developers/devclass_docs/pid1_01.pdf
+ *		Device Class Definition for Physical Interface Devices (PID) Ver. 1.0
+ *		http://www.usb.org/developers/hidpage/pid1_01.pdf
  *
  *		Universal Serial Bus Usage Tables for HID Power Devices Ver. 1.0
- *		http://www.usb.org/developers/devclass_docs/pdcv10.pdf
+ *		http://www.usb.org/developers/hidpage/pdcv10.pdf
  *
- *		HID Point of Sale Usage Tables Ver. 1.0
- *		http://www.usb.org/developers/devclass_docs/pos1_02.pdf
+ *		HID Point of Sale Usage Tables Ver. 1.02
+ *		http://www.usb.org/developers/hidpage/pos1_02.pdf
  *
  *		USB Monitor Control Class Specification, Rev. 1.0
- *		http://www.usb.org/developers/devclass_docs/usbmon10.pdf
+ *		http://www.usb.org/developers/hidpage/usbmon10.pdf
  *
  *		Open Arcade Architecture Device (OAAD)
  *		Data Format Specification Rev. 1.100
- *		http://www.usb.org/developers/devclass_docs/oaaddataformatsv6.pdf
+ *		http://www.usb.org/developers/hidpage/OAADDATAFORMATSv6.PDF
  */
 
 #define USB_HID_DEVICE_CLASS 			0x03
@@ -80,6 +80,13 @@ enum {
 	B_USB_REQUEST_HID_SET_REPORT = 0x09,
 	B_USB_REQUEST_HID_SET_IDLE,
 	B_USB_REQUEST_HID_SET_PROTOCOL
+};
+
+// HID Class-specific requests report types
+enum {
+	B_USB_REQUEST_HID_INPUT_REPORT = 0x01,
+	B_USB_REQUEST_HID_OUTPUT_REPORT,
+	B_USB_REQUEST_HID_FEATURE_REPORT
 };
 
 // HID Usage Pages

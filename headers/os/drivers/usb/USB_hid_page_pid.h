@@ -8,8 +8,8 @@
 
 /* Reference:
  *		HID Usage Page 0x0F: PHYSICAL INTERFACE DEVICE
- *		Device Class Definition for Physical Interface Deviced (PID) Ver. 1.0
- *		http://www.usb.org/developers/devclass_docs/pid1_01.pdf
+ *		Device Class Definition for Physical Interface Devices (PID) Ver. 1.0
+ *		http://www.usb.org/developers/hidpage/pid1_01.pdf
  */
 
 // UsageIDs
